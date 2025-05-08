@@ -2,15 +2,11 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
-
 use Filament\Models\Contracts\FilamentUser;
 use Filament\Models\Contracts\HasTenants;
 use Filament\Panel;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Collection;
@@ -54,25 +50,19 @@ class User extends Authenticatable implements FilamentUser, HasTenants
 		];
 	}
 
-	public function customers(): BelongsToMany
-	{
-		return $this->belongsToMany(Customer::class);
-	}
-
-
-	public function getTenants(Panel $panel): Collection
-	{
-		return $this->customers;
-	}
-
-	public function canAccessTenant(Model $tenant): bool
-	{
-		return $this->customers()->whereKey($tenant)->exists();
-	}
-
 	public function canAccessPanel(Panel $panel): bool
 	{
 		// TODO: povezati sa paymentom
 		return true;
+	}
+
+	public function canAccessTenant(Model $tenant): bool
+	{
+		return false;
+	}
+
+	public function getTenants(Panel $panel): array|Collection
+	{
+		return [];
 	}
 }

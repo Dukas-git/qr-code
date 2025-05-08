@@ -3,6 +3,8 @@
 namespace App\Filament\Pages;
 
 use App\Models\Customer;
+use App\Models\User;
+use Filament\Forms\Components\Hidden;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Pages\Tenancy\RegisterTenant;
@@ -12,7 +14,7 @@ class RegisterCustomer extends RegisterTenant
 {
 	protected static ?string $navigationIcon = 'heroicon-o-document-text';
 
-	protected static string $view = 'filament.pages.register-customer';
+	//protected static string $view = 'filament.pages.register-customer';
 
 	public static function getLabel(): string
 	{
@@ -23,17 +25,19 @@ class RegisterCustomer extends RegisterTenant
 	{
 		return $form
 			->schema([
-				TextInput::make('name'),
-				TextInput::make('handle'),
+				TextInput::make('handle')
+					->label('Subdomain handle'),
+				Hidden::make('owner_id')
+					->default(auth()->id()),
 			]);
 	}
 
-	protected function handleRegistration(array $data): Customer
+	protected function handleRegistration(array $data): User
 	{
+		/** @var Customer $customer */
 		$customer = Customer::create($data);
-
-		$customer->members()->attach(auth()->user());
-
-		return $customer;
+		$customer->save();
+		$this->tenant = $customer;
+		return $customer->owner()->getRelated();
 	}
 }

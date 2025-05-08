@@ -2,23 +2,18 @@
 
 namespace App\Models;
 
-use Filament\Models\Contracts\HasName;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class Customer extends Model implements HasName
+class Customer extends Model
 {
-	/** @use HasFactory<\Database\Factories\CustomerFactory> */
-	use HasFactory;
+	protected $fillable = [
+		'handle',
+		'owner_id',
+	];
 
-	public function users(): HasMany
+	public function owner(): BelongsTo
 	{
-		return $this->hasMany(User::class);
-	}
-
-	public function getFilamentName(): string
-	{
-		return $this->domain;
+		return $this->belongsTo(User::class, 'user_id');
 	}
 }

@@ -10,9 +10,6 @@ class EditCustomerProfile extends EditTenantProfile
 {
 	protected static ?string $navigationIcon = 'heroicon-o-document-text';
 
-	protected static string $view = 'filament.pages.edit-customer-profile';
-
-
 	public static function getLabel(): string
 	{
 		return 'Customer profile';

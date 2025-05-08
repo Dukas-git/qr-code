@@ -5,6 +5,7 @@ namespace App\Providers\Filament;
 use App\Filament\Pages\EditCustomerProfile;
 use App\Filament\Pages\RegisterCustomer;
 use App\Models\Customer;
+use App\Models\User;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\AuthenticateSession;
 use Filament\Http\Middleware\DisableBladeIconComponents;
@@ -31,6 +32,7 @@ class AdminPanelProvider extends PanelProvider
 			->id('admin')
 			->path('admin')
 			->login()
+			->registration()
 			->colors([
 				'primary' => Color::Amber,
 			])
@@ -58,15 +60,15 @@ class AdminPanelProvider extends PanelProvider
 			->authMiddleware([
 				Authenticate::class,
 			])
-			->tenant(Customer::class)
-			->tenantProfile(EditCustomerProfile::class)
+			->tenant(User::class)
 			->tenantRegistration(RegisterCustomer::class)
-			->tenantMenuItems([
-				MenuItem::make()
-					->label('Edit')
-					->url(fn (): string => EditCustomerProfile::getUrl())
-					->icon('heroicon-m-cog-8-tooth'),
-			])
+			//->tenantProfile(EditCustomerProfile::class)
+			//->tenantMenuItems([
+			//	MenuItem::make()
+			//		->label('Edit')
+			//		->url(fn (): string => EditCustomerProfile::getUrl())
+			//		->icon('heroicon-m-cog-8-tooth'),
+			//])
 		;
 	}
 }
